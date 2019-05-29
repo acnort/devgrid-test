@@ -1,17 +1,82 @@
 @import './../../styles/_variables.sass'
 
-.container
-    width: 100%
-    max-width: 1280px
-    margin: 0 auto
+.box
+    background: white
+    padding: 70px
+    margin: 30px 0
+    box-shadow: 0 0 20px rgba($text-color, .1)
+    min-height: calc(100vh - 60px)
 
 h1
     color: $main-color
     font-size: 55px
     font-weight: 700
-    text-align: center
-    padding-top: 70px
+    margin-top: 0
 
 .list
-    &.loading
-        min-height: 300px
+    display: flex
+    align-items: center
+    justify-content: space-between
+    flex-wrap: wrap
+    margin: 0 -1rem
+
+    label
+        flex: 0 0 50%
+        display: flex
+        align-items: center
+        padding: .4rem 1rem
+        color: $text-color
+        font-weight: 500
+        cursor: pointer
+
+        .checkmark
+            height: 1em
+            width: 1em
+            border-radius: 2px
+            position: relative
+            border: 1px solid $border-color
+            margin-right: .4rem
+            display: flex
+            align-items: center
+            justify-content: center
+
+            &:before
+                content: ""
+                position: relative
+                height: .6em
+                width: .6em
+                background: $main-color
+                opacity: 0
+                transition: .3s
+
+        .text
+            user-select: none
+            display: flex
+            align-items: center
+            transition: .3s
+
+            &:after
+                content: " - Read"
+                font-size: .8em
+                position: relative
+                margin-left: 5px
+                color: $main-color
+                font-style: italic
+                opacity: 0
+                transition: .3s
+
+        input
+            display: none
+
+            &:checked
+                & ~ .checkmark:before
+                    opacity: 1
+
+                & ~ .text
+                    color: $border-color
+
+                    &:after
+                        opacity: 1
+
+.common-button
+    margin-top: 45px
