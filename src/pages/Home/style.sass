@@ -20,8 +20,9 @@ h1
     flex-wrap: wrap
     margin: 0 -1rem
 
-    label
+    .book
         flex: 0 0 50%
+        max-width: 50%
         display: flex
         align-items: center
         padding: .4rem 1rem
@@ -39,6 +40,7 @@ h1
             display: flex
             align-items: center
             justify-content: center
+            flex-shrink: 0
 
             &:before
                 content: ""
@@ -51,19 +53,20 @@ h1
 
         .text
             user-select: none
-            display: flex
-            align-items: center
             transition: .3s
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
 
-            &:after
-                content: " - Read"
-                font-size: .8em
-                position: relative
-                margin-left: 5px
-                color: $main-color
-                font-style: italic
-                opacity: 0
-                transition: .3s
+        .is-read
+            flex-shrink: 0
+            font-size: .8em
+            position: relative
+            margin-left: 5px
+            color: $main-color
+            font-style: italic
+            opacity: 0
+            transition: .3s
 
         input
             display: none
@@ -75,8 +78,8 @@ h1
                 & ~ .text
                     color: $border-color
 
-                    &:after
-                        opacity: 1
+                & ~ .is-read
+                    opacity: 1
 
 .common-button
     margin-top: 45px

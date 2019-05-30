@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import api from './../../api'
+import { debounce } from 'lodash'
 import './style.sass';
 
 class Home extends Component{
@@ -9,16 +10,30 @@ class Home extends Component{
     }
 
     componentDidMount(){
+        const hasSavedBooks = localStorage.getItem('books');
+
         // sends get request to obtain a book list
-        this.refreshBooks();
+        if (!hasSavedBooks)
+            this.loadBooks();
+        else
+            this.setState({books: JSON.parse(hasSavedBooks)});
     }
 
-    inputChanged = (target) => {
-        console.log(localStorage);
-        console.log(JSON.parse(localStorage.books));
+    inputChanged = async (target, index) => {
+        let newBookData = this.state.books[index];
+        newBookData.read = target.checked;
+
+        let newBooksArray = this.state.books;
+        newBooksArray[index] = newBookData;
+
+        //debouncing for performance
+        debounce(() => {
+            this.setState({ books: newBooksArray});
+            localStorage.setItem('books', JSON.stringify(newBooksArray));
+        }, 1000)();
     }
 
-    refreshBooks = async () => {
+    loadBooks = async () => {
         this.setState({isLoading: true});
 
         const { data } = await api.get('people/george08/lists.json');
@@ -29,7 +44,7 @@ class Home extends Component{
 
         await this.setState({ books: data.entries, isLoading: false });
 
-        localStorage.setItem('books', JSON.stringify(this.state.books))
+        localStorage.setItem('books', JSON.stringify(this.state.books));
     }
 
     render(){
@@ -38,22 +53,25 @@ class Home extends Component{
             <div className="container">
                 <div className="box">
                     <h1>My Books</h1>
-                    {isLoading &&
+                    {isLoading ?
+                        <>
+                        <h4>Mark the books you've read below:</h4>
                         <div className="loading">Loading Books...</div>
-                    }
-                    <div className="list">
-                        {!isLoading
-                            && books.map((book, index) => (
+                        </>
+                    :
+                        <>
+                        <div className="list">
+                            {books.map((book, index) => (
                                 <label key={index} htmlFor={`book-${index}`} className="book">
-                                    <input type="checkbox" name="read" id={`book-${index}`} onChange={(ev) => this.inputChanged(ev.target)}/>
+                                    <input type="checkbox" name="read" id={`book-${index}`} defaultChecked={book.read} onChange={(ev) => this.inputChanged(ev.target, index)}/>
                                     <span className="checkmark"></span>
                                     <span className="text">{book.name}</span>
+                                    <span className="is-read"> - Read</span>
                                 </label>
-                            ))
-                        }
-                    </div>
-                    {!isLoading &&
-                        <button className="common-button" type="submit" onClick={this.refreshBooks}>Refresh Books</button>
+                            ))}
+                        </div>
+                        <button className="common-button" type="submit" onClick={this.loadBooks}>Generate Annual Report</button>
+                        </>
                     }
                 </div>
             </div>

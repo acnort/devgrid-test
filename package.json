@@ -30,6 +30,7 @@
     ]
   },
   "devDependencies": {
+    "lodash": "^4.17.11",
     "sass-loader": "^7.1.0"
   }
 }
