@@ -20,9 +20,11 @@ h1
     flex-wrap: wrap
     margin: 0 -1rem
 
-    .book
+    .checkbox-item
         flex: 0 0 50%
         max-width: 50%
+
+    .book
         display: flex
         align-items: center
         padding: .4rem 1rem
@@ -59,26 +61,28 @@ h1
             white-space: nowrap
 
         .is-read
-            flex-shrink: 0
             font-size: .8em
             position: relative
-            margin-left: 5px
             color: $main-color
             font-style: italic
             opacity: 0
+            display: block
             transition: .3s
+            margin-left: .2em
+            white-space: nowrap
 
-        input
-            display: none
+    input
+        display: none
 
-            &:checked
-                & ~ .checkmark:before
+        &:checked
+            & ~ .book
+                .checkmark:before
                     opacity: 1
 
-                & ~ .text
+                .text
                     color: $border-color
 
-                & ~ .is-read
+                .is-read
                     opacity: 1
 
 .common-button

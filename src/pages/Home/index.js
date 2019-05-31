@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import api from './../../api'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash';
+import api from './../../api';
 import './style.sass';
+
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 class Home extends Component{
     state = {
         isLoading: false,
-        books: [],
+        books: []
     }
 
     componentDidMount(){
@@ -20,18 +22,36 @@ class Home extends Component{
     }
 
     inputChanged = async (target, index) => {
-        let newBookData = this.state.books[index];
-        newBookData.read = target.checked;
+        let currentMonth = new Date().getMonth();
+        currentMonth = await months.filter((month, index) => currentMonth === index)[0];
 
-        let newBooksArray = this.state.books;
-        newBooksArray[index] = newBookData;
+        await this.setState(prevState => ({
+            books: prevState.books.map((el, i) => (
+                i === index ? {
+                    ...el,
+                    month: target.checked ? currentMonth : null,
+                    read: target.checked,
+                    isSaving: true
+                } : el
+            ))
+        }));
 
-        //debouncing for performance
-        debounce(() => {
-            this.setState({ books: newBooksArray});
-            localStorage.setItem('books', JSON.stringify(newBooksArray));
-        }, 1000)();
+        //debounce
+        this.saveBooks();
     }
+
+    saveBooks = debounce(async () => {
+        await localStorage.setItem('books', JSON.stringify(this.state.books));
+
+        this.setState(prevState => ({
+            books: prevState.books.map(el => (
+                {
+                    ...el,
+                    isSaving: false
+                }
+            ))
+        }));
+    }, 1000);
 
     loadBooks = async () => {
         this.setState({isLoading: true});
@@ -54,20 +74,24 @@ class Home extends Component{
                 <div className="box">
                     <h1>My Books</h1>
                     {isLoading ?
-                        <>
-                        <h4>Mark the books you've read below:</h4>
                         <div className="loading">Loading Books...</div>
-                        </>
                     :
                         <>
+                        <h4>Mark the books you've read below:</h4>
                         <div className="list">
                             {books.map((book, index) => (
-                                <label key={index} htmlFor={`book-${index}`} className="book">
+                                <div key={index} className="checkbox-item">
                                     <input type="checkbox" name="read" id={`book-${index}`} defaultChecked={book.read} onChange={(ev) => this.inputChanged(ev.target, index)}/>
-                                    <span className="checkmark"></span>
-                                    <span className="text">{book.name}</span>
-                                    <span className="is-read"> - Read</span>
-                                </label>
+                                    <label htmlFor={`book-${index}`} className="book">
+                                        <span className="checkmark"></span>
+                                        <span className="text">{book.name}</span>
+                                        {book.month &&
+                                            <span className="is-read">
+                                                {!book.isSaving ? `- Read on ${book.month}` : 'Saving...'}
+                                            </span>
+                                        }
+                                    </label>
+                                </div>
                             ))}
                         </div>
                         <button className="common-button" type="submit" onClick={this.loadBooks}>Generate Annual Report</button>
