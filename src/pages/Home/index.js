@@ -92,7 +92,7 @@ class Home extends Component {
       months,
       inputChanged: this.inputChanged
     };
-    console.warn(books);
+
     const bookList = books.map((book, index) => {
       return <Book key={index} index={index} book={book} {...props} />;
     });

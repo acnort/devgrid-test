@@ -16,7 +16,6 @@ class Report extends Component {
   }
 
   renderBooks = () => {
-    console.warn(this.state.readBooks);
     return this.state.readBooks.map((book, index) => (
       <BookDetail key={index} book={book} />
     ));

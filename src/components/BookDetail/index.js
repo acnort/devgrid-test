@@ -32,7 +32,7 @@ class Book extends Component {
 
   render() {
     const { book } = this.state;
-    console.warn(book);
+
     return (
       <>
         {book && (
