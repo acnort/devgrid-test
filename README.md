@@ -2,6 +2,10 @@
 
 A ReactJS project for DevGrid using Webpack, Sass, Babel, Eslint, NPM, Jest and Puppeteer.
 
+### `npm install`
+
+Start by cloning the repo and installing all the required dependencies.
+
 ### `npm start`
 
 Runs the app in the development mode.<br>
