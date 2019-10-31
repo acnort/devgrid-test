@@ -24,7 +24,8 @@ const months = [
 class Home extends Component {
   state = {
     isLoading: false,
-    books: []
+    books: [],
+    disableSubmit: true
   };
 
   componentDidMount() {
@@ -42,6 +43,7 @@ class Home extends Component {
     )[0];
 
     await this.setState(prevState => ({
+      disableSubmit: true,
       books: prevState.books.map((el, i) =>
         i === index
           ? {
@@ -60,6 +62,7 @@ class Home extends Component {
 
   saveBooks = debounce(async () => {
     this.setState(prevState => ({
+      disableSubmit: false,
       books: prevState.books.map(el => ({
         ...el,
         isSaving: false
@@ -112,7 +115,7 @@ class Home extends Component {
   };
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, disableSubmit } = this.state;
     return (
       <div className="container">
         <div className="box">
@@ -124,9 +127,10 @@ class Home extends Component {
               <h4>Mark the books you've read below:</h4>
               <div className="list">{this.renderBooks()}</div>
               <button
-                className="common-button"
+                className={`common-button ${disableSubmit ? 'default-button' : ''}`}
                 type="submit"
                 onClick={this.generateReport}
+                disabled={disableSubmit}
               >
                 Generate Annual Report
               </button>
