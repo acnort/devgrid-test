@@ -22,13 +22,16 @@ class Report extends Component {
   };
 
   render() {
+    const { readBooks } = this.state
     return (
       <div className="container">
         <div className="box">
           <h1>Annual Report</h1>
-          <h2>
-            Books Read: <span>12</span>
-          </h2>
+          {readBooks &&
+            <h2>
+              Books Read: <span>{readBooks.length}</span>
+            </h2>
+          }
           <div className="book-list">{this.renderBooks()}</div>
         </div>
       </div>
