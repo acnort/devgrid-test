@@ -20,7 +20,7 @@ class Book extends Component {
         />
         <label htmlFor={`book-${index}`} className="book">
           <span className="checkmark" />
-          <span className="text">{book.name}</span>
+          <span className="text">{book.title}</span>
           {book.month && (
             <span className="is-read">
               {!book.isSaving ? `- Read on ${book.month}` : "Saving..."}

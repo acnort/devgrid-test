@@ -72,7 +72,9 @@ class Home extends Component {
   fetchBooks = async () => {
     this.setState({ isLoading: true });
 
-    const { data } = await api.get("people/george08/lists.json");
+    const { data } = await api.get(
+      "people/altcaledor/lists/OL137448L/seeds.json"
+    );
 
     await data.entries.map(book => {
       return (book.read = false);
@@ -90,12 +92,23 @@ class Home extends Component {
       months,
       inputChanged: this.inputChanged
     };
-
+    console.warn(books);
     const bookList = books.map((book, index) => {
       return <Book key={index} index={index} book={book} {...props} />;
     });
 
     return bookList;
+  };
+
+  generateReport = () => {
+    this.props.history.push("/report", {
+      books: this.state.books
+    });
+  };
+
+  reloadList = () => {
+    localStorage.clear();
+    this.fetchBooks();
   };
 
   render() {
@@ -113,9 +126,16 @@ class Home extends Component {
               <button
                 className="common-button"
                 type="submit"
-                onClick={this.fetchBooks}
+                onClick={this.generateReport}
               >
                 Generate Annual Report
+              </button>
+              <button
+                className="common-button default-button"
+                type="submit"
+                onClick={this.reloadList}
+              >
+                Clear and Reload List
               </button>
             </>
           )}
