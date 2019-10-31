@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "jest": "^24.7.1",
     "node-sass": "^4.12.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -12,7 +13,8 @@
     "react-scripts": "3.0.1"
   },
   "scripts": {
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "test": "jest --runInBand --watch"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -30,7 +32,10 @@
     ]
   },
   "devDependencies": {
+    "jest-puppeteer": "^3.9.0",
     "lodash": "^4.17.11",
+    "puppeteer": "^2.0.0",
     "sass-loader": "^7.1.0"
-  }
+  },
+  "preset": "jest-puppeteer"
 }
