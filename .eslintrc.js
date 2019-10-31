@@ -10,6 +10,8 @@ module.exports = {
     jestPuppeteer: true
   },
   parserOptions: {
-    ecmaVersion: 2017
+    ecmaVersion: 2017,
+    sourceType: "module",
+    allowImportExportEverywhere: true
   }
 };
